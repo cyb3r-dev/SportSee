@@ -1,0 +1,22 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    
+    font-weight: 400;
+    font-family: DM Sans, sans-serif;
+}
+
+body {
+    max-width: 1440px;
+    margin-inline: auto;
+
+    header, section {
+        max-width: 1440px;
+        margin-inline: 100px;
+    }
+}
+
+a {
+    text-decoration: none;
+}

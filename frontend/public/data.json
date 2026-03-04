@@ -1,0 +1,74 @@
+[
+    {
+        "id": "user001",
+        "userInfos": {
+            "firstName": "John",
+            "lastName": "Doe",
+            "age": 20,
+            "gender": "male",
+            "profilePicture": "http://localhost:8000/images/avatar.jpg",
+            "height": 182,
+            "weight": 85,
+            "createdAt": "2026-01-01"
+        },
+        "username": "dev",
+        "password": "dev",
+        "runningData": [
+            {
+                "date": "2029-11-30",
+                "distance": 5.2,
+                "duration": 34,
+                "heartRate": {
+                    "min": 142,
+                    "max": 177,
+                    "average": 164
+                },
+                "caloriesBurned": 370
+            },
+            {
+                "date": "2029-12-07",
+                "distance": 4.8,
+                "duration": 32,
+                "heartRate": {
+                    "min": 143,
+                    "max": 176,
+                    "average": 165
+                },
+                "caloriesBurned": 345
+            },
+            {
+                "date": "2029-12-14",
+                "distance": 4.5,
+                "duration": 30,
+                "heartRate": {
+                    "min": 144,
+                    "max": 178,
+                    "average": 166
+                },
+                "caloriesBurned": 330
+            },
+            {
+                "date": "2029-12-21",
+                "distance": 3.8,
+                "duration": 25,
+                "heartRate": {
+                    "min": 145,
+                    "max": 180,
+                    "average": 168
+                },
+                "caloriesBurned": 285
+            },
+            {
+                "date": "2029-12-28",
+                "distance": 5,
+                "duration": 33,
+                "heartRate": {
+                    "min": 143,
+                    "max": 177,
+                    "average": 165
+                },
+                "caloriesBurned": 360
+            }
+        ]
+    }
+]
