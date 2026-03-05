@@ -11,24 +11,22 @@ const dataService = {
             localStorage.removeItem('token');
         }
     },
-
     async login(username, password) {
-        if (USE_MOCK) {
-            const response = await fetch('data.json');
-            const users = await response.json();
-            const user = users.find(u => u.username === username && u.password === password);
-            if (user) {
-                const mockToken = btoa(JSON.stringify({ userId: user.id }));
-                this.setAuthToken(mockToken);
-                return { token: mockToken, userId: user.id };
-            }
-            throw new Error('Invalid credentials');
-        } else {
-            const response = await fetch(`${API_BASE_URL}/login`, {
+        const response = await fetch(
+            USE_MOCK ? 'data.json' : `${API_BASE_URL}/login`,
+            USE_MOCK ? {} : {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, password })
-            });
+            }
+        );
+        if (USE_MOCK) {
+            const user = await response.json();
+            return {
+                token: btoa(JSON.stringify({ userId: user.id })),
+                userId: user.id
+            };
+        } else {
             if (!response.ok) {
                 const error = await response.json();
                 throw new Error(error.message || 'Login failed');
@@ -38,17 +36,13 @@ const dataService = {
             return data;
         }
     },
-    
     async getUserInfo() {
+        const response = await fetch(
+            USE_MOCK ? 'data.json' : `${API_BASE_URL}/user-info`,
+            USE_MOCK ? {} : {headers: {'Authorization': `Bearer ${getToken()}`}}
+        );
         if (USE_MOCK) {
-            const token = getToken();
-            if (!token) throw new Error('No token found');
-            const decoded = JSON.parse(atob(token));
-            const userId = decoded.userId;
-            const response = await fetch('data.json');
-            const users = await response.json();
-            const user = users.find(u => u.id === userId);
-            if (!user) throw new Error('User not found');
+            const user = await response.json();
             return {
                 'profile': {
                     'firstName': user.userInfos.firstName,
@@ -66,30 +60,24 @@ const dataService = {
                 }
             };
         } else {
-            const response = await fetch(`${API_BASE_URL}/user-info`, {headers: {'Authorization': `Bearer ${getToken()}`}});
             if (!response.ok) throw new Error('Failed to get user info');
             return response.json();
         }
     },
-    
     async getUserActivities(startWeek, endWeek) {
+        const response = await fetch(
+            USE_MOCK ? 'data.json' : `${API_BASE_URL}/user-activity?startWeek=${startWeek}&endWeek=${endWeek}`,
+            USE_MOCK ? {} : {headers: {'Authorization': `Bearer ${getToken()}`}}
+        );
         if (USE_MOCK) {
-            const token = getToken();
-            if (!token) throw new Error('No token found');
-            const decoded = JSON.parse(atob(token));
-            const userId = decoded.userId;
-            const response = await fetch('data.json');
-            const users = await response.json();
-            const user = users.find(u => u.id === userId);
-            if (!user) throw new Error('User not found');
+            const user = await response.json();
             const filteredSessions = user.runningData.filter((session) => {
                 const sessionDate = new Date(session.date);
                 return sessionDate >= new Date(startWeek) && sessionDate <= new Date(endWeek) && sessionDate <= new Date();
             });
             return filteredSessions.sort((a, b) => new Date(a.date) - new Date(b.date));
         } else {
-            const response = await fetch(`${API_BASE_URL}/user-activity?startWeek=${startWeek}&endWeek=${endWeek}`, { headers: {'Authorization': `Bearer ${getToken()}`} });
-            if (!response.ok) throw new Error('Failed to get activities');
+            if (!response.ok) throw new Error('Failed to get user activities');
             return response.json();
         }
     }
