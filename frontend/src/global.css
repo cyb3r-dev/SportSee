@@ -6,9 +6,86 @@
 }
 
 body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 100px;
+    width: 100%;
+    min-height: 100vh;
     background: #F2F3FF;
+
+    header,
+    main {
+        width: 100%;
+        max-width: 1140px;
+    }
+
+    main {
+        margin-bottom: auto;
+    }
+
+    a {
+        text-decoration: none;
+        color: #000;
+    }
 }
 
-ul {
-    list-style: none;
+h3 {
+    font-size: 1.75rem;
+    font-weight: 600;
+}
+
+h4 {
+    font-size: 1.375rem;
+    font-weight: 500;
+}
+
+button {
+    padding: 16px 40px;
+    border-radius: 10px;
+    color: #FFF;
+    font-size: 16px;
+    font-weight: 500;
+    background: #0B23F4;
+    border: none;
+    transition: all .5s;
+    cursor: pointer;
+
+    &:hover {
+        background: #5465F7;
+    }
+
+    &.nav {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        aspect-ratio: 1 / 1;
+        width: 1.5rem;
+        padding: 0;
+        color: #000;
+        border: 1px solid #717171;
+        background: #FFF;
+
+        svg {
+            scale: .8;
+        }
+
+        &:hover {
+            color: #FFF;
+            border: 1px solid #0B23F4;
+            background: #5465F7;
+        }
+
+        &:disabled {
+            color: #707070;
+            border: 1px solid #707070;
+            background: #E7E7E7;
+
+            &:hover {
+                color: #707070;
+                border: 1px solid #707070;
+                background: #E7E7E7;
+            }
+        }
+    }
 }

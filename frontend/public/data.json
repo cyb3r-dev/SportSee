@@ -1,17 +1,14 @@
 {
-    "id": "user001",
     "userInfos": {
         "firstName": "John",
         "lastName": "Doe",
         "age": 20,
         "gender": "male",
-        "profilePicture": "http://localhost:8000/images/avatar.jpg",
+        "profilePicture": "images/avatar.png",
         "height": 182,
         "weight": 85,
         "createdAt": "2026-01-01"
     },
-    "username": "dev",
-    "password": "dev",
     "runningData": [
         {
             "date": "2029-11-30",
