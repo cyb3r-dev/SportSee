@@ -1,4 +1,4 @@
-# SportSee
+# SportSee Backend
 
 This repo contains all the source code to run the micro API for the sports analytics dashboard SportSee.
 

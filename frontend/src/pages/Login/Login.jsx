@@ -1,10 +1,10 @@
 import { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { Link, useNavigate } from 'react-router-dom';
 import Logo from '../../components/Logo/Logo';
 import styles from './Login.module.css';
 
-export default function Login() {
+export default function LoginPage() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const { login } = useAuth();
@@ -25,9 +25,9 @@ export default function Login() {
             <div className={styles.container}>
                 <Logo />
                 <form onSubmit={handleSubmit}>
-                    <h1>Transformez<br/>vos stats en résultats</h1>
+                    <h3>Transformez<br/>vos stats en résultats</h3>
                     <div className={styles.fields}>
-                        <h2>Se connecter</h2>
+                        <h4>Se connecter</h4>
                         <div className={styles.field}>
                             <label htmlFor="username">Nom d'utilisateur</label>
                             <input
@@ -54,7 +54,7 @@ export default function Login() {
                 </form>
             </div>
             <div className={styles.background}>
-                <img src="images/background.jpg" alt="background" />
+                <img src="images/background.jpg" alt="Background"/>
                 <p>Analysez vos performances en un clin d’œil,<br/>suivez vos progrès et atteignez vos objectifs.</p>
             </div>
         </div>

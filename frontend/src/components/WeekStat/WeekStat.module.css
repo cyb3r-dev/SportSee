@@ -1,0 +1,24 @@
+.weekStat {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    padding: 20px 30px;
+    background: #fff;
+    border-radius: 10px;
+
+    span {
+        font-size: .875rem;
+        color: #707070;
+    }
+
+    .stat {
+        display: flex;
+        align-items: end;
+        gap: .25rem;
+
+        .unit {
+            font-size: 1rem;
+            font-weight: 500;
+        }
+    }
+}

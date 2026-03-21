@@ -32,3 +32,60 @@
         }
     }
 }
+
+.dashboard {
+    display: flex;
+    flex-direction: column;
+    gap: 70px;
+
+    section {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+
+        .title {
+            display: flex;
+            flex-direction: column;
+            gap: .5rem;
+
+            span {
+                font-weight: 500;
+                color: #707070;
+            }
+        }
+
+        .container {
+            display: flex;
+            align-items: stretch;
+            gap: 1.5rem;
+
+            .card {
+                padding: 16px 40px;
+                background: #fff;
+                border-radius: 10px;
+            }
+
+            > :first-child {
+                width: 450px;
+            }
+
+            > :last-child {
+                flex-grow: 1;
+            }
+
+            .dailyGoals {
+                display: flex;
+                flex-direction: column;
+                gap: 3rem;
+                height: 350px;
+            }
+
+            .stats {
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+                gap: 1rem;
+            }
+        }
+    }
+}

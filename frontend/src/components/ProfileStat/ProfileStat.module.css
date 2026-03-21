@@ -1,0 +1,19 @@
+.profileStat {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    padding: 20px 30px;
+    color: #fff;
+    border-radius: 10px;
+    background: #0B23F4;
+
+    .stat {
+        display: flex;
+        align-items: center;
+        gap: .25rem;
+
+        span {
+            color: #B6BDFC;
+        }
+    }
+}

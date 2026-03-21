@@ -13,7 +13,7 @@ export default function Header() {
                     <Link to="/dashboard">Dashboard</Link>
                     <Link to="/profile">Mon profil</Link>
                 </div>
-                <a className={styles.logout} onClick={logout}>Se déconecter</a>
+                <a href="/" className={styles.logout} onClick={logout}>Se déconecter</a>
             </nav>
         </header>
     );
