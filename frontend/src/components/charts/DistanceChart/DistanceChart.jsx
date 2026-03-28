@@ -1,16 +1,11 @@
 import { useState, useEffect } from 'react';
-import dataService from '../../services/dataService';
-import ChartLayout from "../ChartLayout/ChartLayout";
+import dataService from '../../../services/dataService';
+import timeService from '../../../services/timeService';
+import ChartLayout from '../../ChartLayout/ChartLayout';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 
 export default function DistanceChart() {
-    const [startDate, setStartDate] = useState(() => {
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        const monday = new Date(today);
-        monday.setDate(today.getDate() - ((today.getDay() + 6) % 7) - 28);
-        return monday;
-    });
+    const [startDate, setStartDate] = useState(() => timeService.getMonday(4));
 
     const handlePrev = () => {
         setStartDate(prev => {
@@ -38,13 +33,7 @@ export default function DistanceChart() {
     };
 
     const isPastFourWeeks = () => {
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        const currentWeekMonday = new Date(today);
-        currentWeekMonday.setDate(today.getDate() - ((today.getDay() + 6) % 7));
-        const fourWeeksAgoMonday = new Date(currentWeekMonday);
-        fourWeeksAgoMonday.setDate(currentWeekMonday.getDate() - 28);
-        return startDate.toDateString() === fourWeeksAgoMonday.toDateString();
+        return startDate.toDateString() === timeService.getMonday(4).toDateString();
     };
 
     const [weeklyData, setWeeklyData] = useState([]);
@@ -53,43 +42,34 @@ export default function DistanceChart() {
         const fetchData = async () => {
             const endDate = new Date(startDate);
             endDate.setDate(startDate.getDate() + 27);
-            startDate.setHours(0, 0, 0, 0);
             endDate.setHours(23, 59, 59, 999);
-            try {
-                const result = await dataService.getUserActivities(startDate, endDate);
-                if (result && Array.isArray(result)) {
-                    const weekly = [];
-                    for (let i = 0; i < 4; i++) {
-                        const weekStart = new Date(startDate);
-                        weekStart.setDate(startDate.getDate() + (i * 7));
-                        weekStart.setHours(0, 0, 0, 0);
+            const result = await dataService.getUserActivities(startDate, endDate);
+            if (result && Array.isArray(result)) {
+                const weekly = [];
+                for (let i = 0; i < 4; i++) {
+                    const weekStart = new Date(startDate);
+                    weekStart.setDate(startDate.getDate() + (i * 7));
+                    weekStart.setHours(0, 0, 0, 0);
 
-                        const weekEnd = new Date(weekStart);
-                        weekEnd.setDate(weekStart.getDate() + 6);
-                        weekEnd.setHours(23, 59, 59, 999);
+                    const weekEnd = new Date(weekStart);
+                    weekEnd.setDate(weekStart.getDate() + 6);
+                    weekEnd.setHours(23, 59, 59, 999);
 
-                        const weekActivities = result.filter(activity => {
-                            const activityDate = new Date(activity.date);
-                            activityDate.setHours(12, 0, 0, 0);
-                            return activityDate >= weekStart && activityDate <= weekEnd;
-                        });
-                        
-                        const totalDistance = weekActivities.reduce((sum, activity) => {
-                            return sum + (activity.distance || 0);
-                        }, 0);
+                    const weekActivities = result.filter(activity => {
+                        const activityDate = new Date(activity.date);
+                        return activityDate >= weekStart && activityDate <= weekEnd;
+                    });
+                    
+                    const totalDistance = weekActivities.reduce((sum, activity) => {
+                        return sum + (activity.distance || 0);
+                    }, 0);
 
-                        weekly.push({
-                            week: `S${i + 1}`,
-                            distance: totalDistance
-                        });
-                    }
-
-                    setWeeklyData(weekly);
-                } else {
-                    setWeeklyData([]);
+                    weekly.push({
+                        week: `S${i + 1}`,
+                        distance: totalDistance
+                    });
                 }
-            } catch (error) {
-                setWeeklyData([]);
+                setWeeklyData(weekly);
             }
         };
         fetchData();

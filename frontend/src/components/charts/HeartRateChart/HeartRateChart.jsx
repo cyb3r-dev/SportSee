@@ -1,16 +1,11 @@
 import { useState, useEffect } from 'react';
-import dataService from '../../services/dataService';
-import ChartLayout from "../ChartLayout/ChartLayout";
+import dataService from '../../../services/dataService';
+import timeService from '../../../services/timeService';
+import ChartLayout from '../../ChartLayout/ChartLayout';
 import { ComposedChart, CartesianGrid, YAxis, XAxis, Bar, Line, Legend } from 'recharts';
 
 export default function HeartRateChart() {
-    const [startDate, setStartDate] = useState(() => {
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        const monday = new Date(today);
-        monday.setDate(today.getDate() - ((today.getDay() + 6) % 7));
-        return monday;
-    });
+    const [startDate, setStartDate] = useState(() => timeService.getMonday());
 
     const handlePrev = () => {
         setStartDate(prev => {
@@ -38,11 +33,7 @@ export default function HeartRateChart() {
     };
 
     const isCurrentWeek = () => {
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        const monday = new Date(today);
-        monday.setDate(today.getDate() - ((today.getDay() + 6) % 7));
-        return startDate.toDateString() === monday.toDateString();
+        return startDate.toDateString() === timeService.getMonday().toDateString();
     };
 
     const [dailyData, setDailyData] = useState([]);
@@ -51,45 +42,38 @@ export default function HeartRateChart() {
         const fetchData = async () => {
             const endDate = new Date(startDate);
             endDate.setDate(startDate.getDate() + 6);
-            startDate.setHours(0, 0, 0, 0);
             endDate.setHours(23, 59, 59, 999);
-            try {
-                const result = await dataService.getUserActivities(startDate, endDate);
-                if (result && Array.isArray(result)) {
-                    const daily = [];
-                    for (let i = 0; i < 7; i++) {
-                        const currentDate = new Date(startDate);
-                        currentDate.setHours(0, 0, 0, 0);
-                        currentDate.setDate(startDate.getDate() + i);
-                        const year = currentDate.getFullYear();
-                        const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-                        const day = String(currentDate.getDate()).padStart(2, '0');
-                        const dateStr = `${year}-${month}-${day}`;
+            const result = await dataService.getUserActivities(startDate, endDate);
+            if (result && Array.isArray(result)) {
+                const daily = [];
+                for (let i = 0; i < 7; i++) {
+                    const currentDate = new Date(startDate);
+                    currentDate.setHours(0, 0, 0, 0);
+                    currentDate.setDate(startDate.getDate() + i);
+                    const year = currentDate.getFullYear();
+                    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+                    const day = String(currentDate.getDate()).padStart(2, '0');
+                    const dateStr = `${year}-${month}-${day}`;
 
-                        const activity = result.find(a => a.date === dateStr);
-                        let minHR = 0;
-                        let maxHR = 0;
-                        let avgHR = 0;
+                    const activity = result.find(a => a.date === dateStr);
+                    let minHR = 0;
+                    let maxHR = 0;
+                    let avgHR = 0;
 
-                        if (activity && activity.heartRate) {
-                            minHR = activity.heartRate.min;
-                            maxHR = activity.heartRate.max;
-                            avgHR = activity.heartRate.average;
-                        }
-
-                        daily.push({
-                            day: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'][i],
-                            minHR,
-                            maxHR,
-                            avgHR
-                        });
+                    if (activity && activity.heartRate) {
+                        minHR = activity.heartRate.min;
+                        maxHR = activity.heartRate.max;
+                        avgHR = activity.heartRate.average;
                     }
-                    setDailyData(daily);
-                } else {
-                    setDailyData([]);
+
+                    daily.push({
+                        day: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'][i],
+                        minHR,
+                        maxHR,
+                        avgHR
+                    });
                 }
-            } catch (error) {
-                setDailyData([]);
+                setDailyData(daily);
             }
         };
         fetchData();
