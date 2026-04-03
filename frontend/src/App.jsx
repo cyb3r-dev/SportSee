@@ -3,6 +3,7 @@ import { useAuth } from './context/AuthContext';
 import LoginPage from './pages/Login/Login';
 import DashboardPage from './pages/Dashboard/Dashboard';
 import ProfilePage from './pages/Profile/Profile';
+import NotFound from './pages/NotFound/NotFound';
 import './global.css';
 
 const ProtectedRoute = ({ condition, redirect }) => {
@@ -23,6 +24,7 @@ export default function App() {
                     <Route path="/dashboard" element={<DashboardPage />} />
                     <Route path="/profile" element={<ProfilePage />} />
                 </Route>
+                <Route path="*" element={<NotFound/>} />
             </Routes>
         </BrowserRouter>
     );
