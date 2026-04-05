@@ -53,7 +53,7 @@ export default function DashboardPage() {
             }
         };
         fetchWeeklyStats();
-    }, [startDate]);
+    }, []);
 
     return (
         <>
